@@ -13,17 +13,19 @@ export default class App extends Component {
     super(props);
     this.state = {
       hasMore: true,
-      items: [],
+      categories: [],
       offset: 0
     }
   }
 
   loadMore = () => {
-    const { offset } = this.state;
-    const nextItems = categoryList.slice(0, offset + 5);
-    console.log(nextItems, offset);
-    if(offset < categoryList.length){
-      this.setState(prevState => ({ items: nextItems, offset: prevState.offset + 3}))
+    const { offset, hasMore } = this.state;
+    if(offset < categoryList.length && hasMore){
+      setTimeout( () => {
+        const nextItems = categoryList.slice(0, offset + 3);
+        console.log(nextItems);
+        this.setState(prevState => ({ categories: nextItems, offset: prevState.offset + 3 }))
+      }, 500)
     } else {
       this.setState({hasMore: false})
     }
@@ -31,25 +33,27 @@ export default class App extends Component {
 
   render() {
     return (
-      <Container>
+      <Container fluid>
         <Row>
           <Col>
             <h1 className="text-center mb-5">Giphy Lazyloading Images</h1>
           </Col>
+          <Col>
+            <InfiniteScroll
+              pageStart={0}
+              loadMore={this.loadMore}
+              hasMore={this.state.hasMore}
+            >
+              {
+                this.state.categories.length > 0 && this.state.categories.map( item => {
+                  return(
+                    <Carousel searchKey={item} key={item} />
+                  )
+                })
+              }
+            </InfiniteScroll>
+          </Col>
         </Row>
-          <InfiniteScroll
-            pageStart={0}
-            loadMore={this.loadMore}
-            hasMore={this.state.hasMore}
-          >
-            {
-              this.state.items.length > 0 && this.state.items.map( item => {
-                return(
-                  <Carousel searchKey={item} key={item} />
-                )
-              })
-            }
-          </InfiniteScroll>
       </Container>
     );
   }

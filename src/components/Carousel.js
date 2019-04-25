@@ -30,17 +30,19 @@ export default class Carousel extends React.Component {
     render() {
         const { giphies } = this.state;
         const settings = {
+            className: "my-3",
             dots: false,
             arrows: true,
             infinite: true,
             speed: 500,
-            slidesToShow: 4,
-            slidesToScroll: 1
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            lazyLoad: false
         };
 
         return (
             <div>
-                {/* <h4 className="text-capitalize">{(this.props.searchKey).toString()}</h4> */}
+                <h4 className="text-capitalize">{this.props.searchKey}</h4>
                 <SlickCarousel {...settings} >
                 {
                     giphies.length > 0 && giphies.map( giphy => {
